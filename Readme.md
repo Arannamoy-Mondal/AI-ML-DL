@@ -7,7 +7,7 @@
 - [Run jupyterlab inside podman or docker with anaconda on ubuntu](#run-jupyterlab-inside-podman-with-anaconda-on-ubuntu)
 - [CPU frequency control in ubuntu server](#cpu-frequency-control-in-ubuntu-server)
 - Online resources. Colah's blog
-- 
+- [Confusion Matrix](#confusion-matrix)
 # Proxmox set up for gpu passthrough
 #### 🛠️ Edit GRUB
 - Open the GRUB configuration file:
@@ -497,3 +497,15 @@ echo "conda activate conda-env-3-12" >> ~/.bashrc
 conda deactivate
 conda remove --name conda-env-3-12 --all
 ```
+
+# Confusion Matrix  
+|Metric|Prediction|Actual Reality|Definition|Note|
+|-------|----------|-------------|----------|----------|
+|TP|True (Positive)|True (Positive)|Model correctly identified a positive case.|Success
+|TN|False (Negative)|False (Negative)|Model correctly identified a negative case.|Success
+|FP|True (Positive)|False (Negative)|Model said Yes, but it was actually No.|Type I Error (False Alarm)
+|FN|False (Negative)|True (Positive)|Model said No, but it was actually Yes.|Type II Error (Missing Opportunity) 
+
+#### $$Precision=\frac{TP}{TP+FP}$$
+#### $$Recall=\frac{TP}{TP+FN}$$
+#### $$Accuracy=\frac{TP}{TP+FP+FN+TN}$$
