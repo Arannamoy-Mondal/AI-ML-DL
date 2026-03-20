@@ -293,13 +293,13 @@ podman run -it --name Ubuntu-Dev -v /home/customDir/:/home/fedora:z -p 2020:22 -
 `For Ubuntu Container:`
 
 ```bash
-apt update && apt install -y openssh-server sudo curl git nano
+apt update && apt install -y openssh-server sudo curl git nano libatomic1
 ```
 
 `For Fedora Container:`
 
 ```bash
-dnf update && dnf install openssh-server git nano curl sudo
+dnf update && dnf install openssh-server git nano curl sudo 
 ```
 - Set a password for root (only for local development):
 
