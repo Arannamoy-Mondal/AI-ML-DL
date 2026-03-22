@@ -10,7 +10,7 @@ age=st.slider(f"",0,100)
 
 st.write(f"Your age {age}")
 gender=st.radio("Gender",("Male","Female"))
-tech=st.multiselect("Tech:",("Spring","Django",".Net","Spring Boot","Spring Reactive","DRF"
+tech=st.multiselect("Tech:",("Spring","Django",".Net","Spring Boot","Spring Reactive","DRF",
                              "Tensorflow","Pytorch"))
 interest=st.multiselect("Interest",("Microservices","Fintech","AI","ML"))
 
