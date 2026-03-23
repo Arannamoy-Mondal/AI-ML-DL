@@ -8,6 +8,7 @@
 - [CPU frequency control in ubuntu server](#cpu-frequency-control-in-ubuntu-server)
 - Online resources. Colah's blog
 - [Confusion Matrix](#confusion-matrix)
+- [Data Science Project Task](#data-science-project-task)
 - [Life Cycle Of Data Science Project](#life-cycle-of-data-science-project)
 # Proxmox set up for gpu passthrough
 #### 🛠️ Edit GRUB
