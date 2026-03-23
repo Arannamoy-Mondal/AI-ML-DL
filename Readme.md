@@ -520,7 +520,7 @@ C[Domain Expertise Or Product Owner] --> B[Requirement Gathering]
 D[Business Analyst] --> B[Requirement Gathering]
 B[Requirement Gathering] --> E[Data Analyst Or Data Scientist]
 E[Data Analyst Or Data Scientist] --> F((Discussion))
-F((Discussion)) --> G[Domain Expertise Or Product Owner]
+F((Discussion)) --> I[Domain Expertise Or Product Owner]
 F((Discussion)) --> G[Cloud or 3rd pary API's or IOT]
 F((Discussion)) --> H[Cloud Storage]
 G[Cloud or 3rd pary API's or IOT] --> I[Big Data Engineering]
