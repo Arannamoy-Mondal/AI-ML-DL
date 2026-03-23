@@ -519,6 +519,8 @@ A[Data Science Project] --> B[Requirement Gathering]
 C[Domain Expertise Or Product Owner] --> B[Requirement Gathering]
 D[Business Analyst] --> B[Requirement Gathering]
 B[Requirement Gathering] --> E[Data Analyst Or Data Scientist]
+graph TD;
+E[Data Analyst Or Data Scientist] --> F((Discussion))
 F((Discussion)) --> G[Domain Expertise Or Product Owner]
 F((Discussion)) --> G[Cloud or 3rd pary API's or IOT]
 F((Discussion)) --> H[Cloud Storage]
