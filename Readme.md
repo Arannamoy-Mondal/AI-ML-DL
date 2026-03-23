@@ -8,6 +8,7 @@
 - [CPU frequency control in ubuntu server](#cpu-frequency-control-in-ubuntu-server)
 - Online resources. Colah's blog
 - [Confusion Matrix](#confusion-matrix)
+- [Life Cycle Of Data Science Project](#life-cycle-of-data-science-project)
 # Proxmox set up for gpu passthrough
 #### 🛠️ Edit GRUB
 - Open the GRUB configuration file:
@@ -509,3 +510,29 @@ conda remove --name conda-env-3-12 --all
 #### $$Precision=\frac{TP}{TP+FP}$$
 #### $$Recall=\frac{TP}{TP+FN}$$
 #### $$Accuracy=\frac{TP}{TP+FP+FN+TN}$$
+
+# Data Science Project task
+
+```mermaid
+graph LR;
+A[Data Science Project] --> B[Requirement Gathering]
+C[Domain Expertise Or Product Owner] --> B[Requirement Gathering]
+D[Business Analyst] --> B[Requirement Gathering]
+B[Requirement Gathering] --> E[Data Analyst Or Data Scientist]
+F((Discussion)) --> G[Domain Expertise Or Product Owner]
+F((Discussion)) --> G[Cloud or 3rd pary API's or IOT]
+F((Discussion)) --> H[Cloud Storage]
+G[Cloud or 3rd pary API's or IOT] --> I[Big Data Engineering]
+H[Cloud Storage]-->I[Big Data Engineering]
+```
+
+
+# Life Cycle Of Data Science Project
+
+```mermaid
+graph LR;
+A[Feature Engineering] --> B[Feature Selection]
+B[Feature Selection] --> C[Model Creation And Hyper Param Tuning]
+C[Model Creation And Hyper Param Tuning] --> D[Model Deployment]
+D[Model Deployment] --> E[Model Monitoring And Retraining]
+```
