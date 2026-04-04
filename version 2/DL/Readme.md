@@ -39,4 +39,8 @@ $(x,y) ---> x\epsilon R^n, y \epsilon {0,1}$
 ```mermaid
 graph LR;
 x1[Basic Input] --> SM[Summation and Bias]
+x2[Basic Input] --> SM[Summation and Bias]
+x3[Basic Input] --> SM[Summation and Bias]
+SM[Summation and Bias]  --> A1[Activation Function]
+A1[Activation Function] --> Y[Output]
 ```
