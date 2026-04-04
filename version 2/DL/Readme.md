@@ -37,5 +37,5 @@ $(x,y) ---> x\epsilon R^n, y \epsilon {0,1}$
 ## Architecture of perceptrons
 
 ```mermaid
-x1[$x_0=1$]
+x1[Basic Input]-->SM[Summation and Bias]
 ```
