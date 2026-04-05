@@ -47,7 +47,7 @@ $(x,y) ---> x\epsilon R^n, y \epsilon {0,1}$
 
 ## 1943 McCulloch and Pitts
 
-## Architecture of perceptrons
+## Architecture of single layer perceptrons
 
 ```mermaid
 graph LR;
@@ -57,7 +57,6 @@ x3[Basic Input] --> SM[Summation and Bias]
 SM[Summation and Bias]  --> A1[Activation Function or Linear Function]
 A1[Activation Function] --> Y[Output]
 ```
-
 
 ## Weight updating formula
 $$w_{new}=w_{old}+\eta(y-\hat{y})x_i$$
@@ -178,3 +177,29 @@ print("Test acc:",accuracy_score(y_test,y_pred_test))
 
 
 ## What is decision boundaries?
+- Decision boundary: the line or surface that separates classes
+
+
+## Gradient Descent
+
+$y=mx+c$
+
+$\hat{y}=mx_i+c$
+
+$Loss=\sum^4_{i=1}(y-\hat{y})^2$
+
+$Loss=\sum^4_{i=1}(y-mx_i-c)^2$
+
+$Loss=\sum^4_{i=1}(y-10x_i-c)^2$ when m=10
+
+$b_{new}=b_{old}-slope$ , when slope (+)ve
+
+$b_{new}=b_{old}+slope$ , when slope (-)ve
+
+$b_{new}=b_{old}-\eta slope$
+
+$b_{new}=b_{old}+\eta slope$
+
+$b_{new}=b_{old}-\eta*\frac{\delta y}{\delta x}$
+$$
+$$
