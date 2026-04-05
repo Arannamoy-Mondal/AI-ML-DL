@@ -203,3 +203,42 @@ $b_{new}=b_{old}+\eta * slope$
 $b_{new}=b_{old}-\eta*\frac{\delta y}{\delta x}$
 $$
 $$
+
+
+```py
+from sklearn.datasets import make_regression
+import matplotlib.pyplot as plt
+import numpy as np
+from sklearn.model_selection import cross_val_score
+X,y=make_regression(n_samples=100,n_features=1,n_informative=1,n_targets=1,noise=20,random_state=13)
+plt.scatter(X,y)
+from sklearn.model_selection import train_test_split
+from sklearn.linear_model import LinearRegression
+from sklearn.metrics import r2_score
+X_train,X_test,y_train,y_test=train_test_split(X,y,test_size=0.2,random_state=42)
+lr=LinearRegression()
+lr.fit(X_train,y_train)
+print(lr.coef_)
+print(lr.intercept_)
+y_pred=lr.predict(X_test)
+print(r2_score(y_test,y_pred))
+
+class GDRegressor:
+    def __init__(self,learning_rate,epochs):
+        self.m=lr.coef_
+        self.c=-120
+        self.epochs=epochs
+        self.lr=learning_rate
+    def fit(self,X,y):
+        for i in range(self.epochs):
+            loss_slope_c=-2*np.sum(y-self.m*X.ravel()-self.c)
+            self.b=self.c-(self.lr*loss_slope_c)
+            print(f"m= {self.m}, b={self.c}, epochs={i}")
+    def predict(self,X):
+        return self.m*X+self.c
+
+
+gd=GDRegressor(0.001,50)
+gd.fit(X_train,y_train)
+print(r2_score(y_test,gd.predict(X_test)))
+```
