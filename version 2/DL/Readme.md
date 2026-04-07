@@ -345,21 +345,21 @@ $$weight=weight_{ij}^k, \text{here k=layer number,i=source node, j=destination n
 - Prediction: $\delta(w^TX+b)$ here T means transpose.
 
 $$
-\begin{bmatrix}
+\begin{pmatrix}
 w^1_{11} & w^1_{21} & w^1_{31} \\
 w^1_{12} & w^1_{22} & w^1_{31} \\
 w^1_{13} & w^1_{22} & w^1_{31} \\
 w^1_{14} & w^1_{22} & w^1_{31} 
-\end{bmatrix}^T 
-\begin{bmatrix}
+\end{pmatrix}^T 
+\begin{pmatrix}
 x_{11} \\
 x_{12} \\
 x_{13} \\
 x_{14} \\
-\end{bmatrix}+
-\begin{bmatrix}
+\end{pmatrix}+
+\begin{pmatrix}
 b_{11} \\
 b_{12} \\
 b_{13} \\
-\end{bmatrix}
+\end{pmatrix}
 $$
