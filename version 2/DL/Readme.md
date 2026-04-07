@@ -372,4 +372,4 @@ $$
 
 ## Which equation represents forward propagation for a layer?
 
--  $a^{(l)} = \sigma(W^{(l)}a^{(l-1)} + b^{(l)})$ , here $ a^{(l-1)} $ = input from previous layer, $ W^{(l)}a^{(l-1)} + b^{(l)} $ = combination of current layer weight and bias, $ a^{(l)} $ = final output of this layer
+-  $a^{l} = \sigma(W^{l}a^{l-1} + b^{l})$ , here $ a^{l-1} $ = input from previous layer, $ W^{(l)}a^{(l-1)} + b^{(l)} $ = combination of current layer weight and bias, $ a^{(l)} $ = final output of this layer
