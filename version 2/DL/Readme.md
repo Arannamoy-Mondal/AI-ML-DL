@@ -373,3 +373,6 @@ $$
 ## Which equation represents forward propagation for a layer?
 
 -  $a^{l} = \sigma(W^{l}a^{l-1} + b^{l})$ , here $ a^{l-1} $ = input from previous layer, $ W^{(l)}a^{(l-1)} + b^{(l)} $ = combination of current layer weight and bias, $ a^{(l)} $ = final output of this layer
+
+## What is autograd?
+- Autograd is a pytorch's automatic differentiation enginge that powers neural network training by computing gradients of loss function with respect to model parameters.  
