@@ -7,10 +7,15 @@
     - [using podman ubuntu fedora as a podman os vs code ssh for lightweight dev environments](#using-podman--ubuntufedora-as-a-podman-os-vs-code-ssh-for-lightweight-dev-environments)
     - [Run jupyterlab inside podman or docker with anaconda on ubuntu](#run-jupyterlab-inside-podman-with-anaconda-on-ubuntu)
     - [CPU frequency control in ubuntu server](#cpu-frequency-control-in-ubuntu-server)
+    - [All Installed Package](#all-install-package)
+    - [All Upgrade Package](#all-upgrade-package)
+    - [MOK reset](#mok-reset)
+- ML
     - Online resources. Colah's blog
     - [Confusion Matrix](#confusion-matrix)
     - [Data Science Project Task](#data-science-project-task)
-    - [Life Cycle Of Data Science Project](#life-cycle-of-data-science-project)
+    - [Life Cycle Of Data Science Project](#life-cycle-of-data-science-project)   
+
 - DL
 # Proxmox set up for gpu passthrough
 #### 🛠️ Edit GRUB
@@ -500,6 +505,21 @@ echo "conda activate conda-env-3-12" >> ~/.bashrc
 ```bash
 conda deactivate
 conda remove --name conda-env-3-12 --all
+```
+
+# All install package
+
+```bash
+grep "install " /var/log/dpkg.log | tail -n 100
+```
+
+# All upgrade package
+```bash
+grep "upgrade " /var/log/dpkg.log | tail -n 100
+```
+# MOK reset
+```bash
+sudo mokutil --import /var/lib/shim-signed/mok/MOK.der
 ```
 
 # Confusion Matrix  
