@@ -386,3 +386,45 @@ $$
 
 ## What is autograd?
 - Autograd is a pytorch's automatic differentiation enginge that powers neural network training by computing gradients of loss function with respect to model parameters.  
+
+# CNN
+## CNN Main Components
+- Convolutional Layers: Edges, Textures and more complex patterns(face, objects)
+- Pooling Layers: Decrease image size (Down sampling)
+- Activation Functions: ReLU
+- Fully Connected Layers: Same as ANN
+
+## Convolution Operation:
+- If input n*n*n,filter m*m*m then output (n-m+1)*(n-m+1)*(n-m+1)
+## Padding
+## Stride
+- Output=((n+2p-f)/s) +1, h input size, p padding, s stride, f filter size
+- Downsampling
+- Computation become faster
+- Sometime reduce accuracy
+
+## Pooling
+- 
+
+#### What does convolution operation do in CNN?
+- Multiplies a filter/kernel with input image regions
+#### What is the main problem of convolution without padding?
+- Output size shrinks at every layer
+#### What does padding do in convolution?
+- Adds zeros around input borders
+#### What is Stride in convolution?
+- The step size the filter moves across image
+#### What is the output dimension formula with padding and stride?
+- $$(N + 2P - F) / S + 1$$
+#### What is the main purpose of pooling operation?
+- To reduce spatial dimensions of feature maps
+#### What does Max Pooling select from a region?
+- The maximum value
+#### How does Average Pooling differ from Max Pooling?
+- Average pooling takes the arithmatic mean of a region
+#### What is the typical sequence of layers in a CNN block?
+- Convolution   -> ReLU -> Pooling
+#### Why is ReLU activation function critical in CNN architecture?
+- It introduces non-linearity to the model
+
+
