@@ -428,3 +428,7 @@ $$
 - It introduces non-linearity to the model
 
 
+#  Books
+- Dive into Deep Learning -> https://d2l.ai/
+- Deep Learning -> https://www.deeplearningbook.org/
+- Deep Learning with Python -> https://deeplearningwithpython.io/chapters/
