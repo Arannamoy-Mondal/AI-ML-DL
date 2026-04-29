@@ -15,6 +15,7 @@
     - [Confusion Matrix](#confusion-matrix)
     - [Data Science Project Task](#data-science-project-task)
     - [Life Cycle Of Data Science Project](#life-cycle-of-data-science-project)   
+    - [sklearn.metrics usage purpose](#sklearnmetrics-usage-purpose)
 
 - DL
 # Proxmox set up for gpu passthrough
@@ -598,3 +599,61 @@ with mlflow.start_run():
 model=mlflow.pyfunc.load_model(model_info.model_uri)
 
 ```
+
+
+#### sklearn.metrics usage purpose
+
+---
+
+## 1. Classification Metrics
+These are used when your target variable is categorical (e.g., Spam vs. Not Spam). They measure how well the model assigns the correct labels.
+
+| Metric | Purpose | Use Case |
+| :--- | :--- | :--- |
+| **Accuracy** | Ratio of correct predictions to total predictions. | Balanced datasets where every class is equally important. |
+| **Precision** | Ability of the classifier not to label a negative sample as positive. | When the "Cost of False Positive" is high (e.g., Email spam filters). |
+| **Recall (Sensitivity)** | Ability of the classifier to find all positive samples. | When the "Cost of False Negative" is high (e.g., Cancer detection). |
+| **F1-Score** | The harmonic mean of Precision and Recall. | When you need a balance between the two, especially on imbalanced data. |
+| **ROC-AUC** | Area under the Receiver Operating Characteristic curve. | Measuring the model's ability to distinguish between classes at various thresholds. |
+| **Confusion Matrix** | A table layout that allows visualization of the performance of an algorithm. | Deep diving into exactly *where* the model is getting confused. |
+
+
+
+---
+
+## 2. Regression Metrics
+Regression metrics are used when your target variable is continuous (e.g., predicting house prices or temperature).
+
+*   **Mean Absolute Error (MAE):** The average of the absolute differences between predicted and actual values. It is easy to interpret as it’s in the same units as the target.
+*   **Mean Squared Error (MSE):** The average of the squares of the errors. It heavily penalizes large errors (outliers).
+*   **Root Mean Squared Error (RMSE):** The square root of MSE. It brings the error back to the original units while still penalizing outliers.
+*   **R-squared ($R^2$):** The "coefficient of determination." It represents the proportion of variance for a dependent variable that's explained by the model. 1.0 is a perfect fit.
+
+
+
+---
+
+## 3. Clustering Metrics
+Since clustering is unsupervised (we don't usually have "correct" labels), these metrics evaluate how well-defined the groups are.
+
+*   **Silhouette Coefficient:** Measures how similar an object is to its own cluster compared to other clusters. Scores range from -1 to 1; higher is better.
+*   **Adjusted Rand Index (ARI):** Measures the similarity between two assignments, ignoring permutations. Used if you actually *do* have ground truth labels to compare against.
+*   **Inertia:** Sum of squared distances of samples to their closest cluster center (lower is generally better, but it's not normalized).
+
+---
+
+## 4. Pairwise Metrics and Distances
+This sub-module (`sklearn.metrics.pairwise`) calculates distances or similarities between sets of samples rather than evaluating a model's performance.
+
+*   **Cosine Similarity:** Measures the cosine of the angle between two vectors. Widely used in text analysis and recommendation systems.
+*   **Euclidean Distance:** The "straight-line" distance between two points in space.
+*   **Manhattan Distance:** The distance measured along axes at right angles (like walking city blocks).
+
+---
+
+## 5. Scoring API: The "All-in-One" Tool
+Scikit-Learn also provides a higher-level API to automate evaluation during Cross-Validation or Grid Search.
+
+*   **`make_scorer`:** A factory function that wraps a metric function so it can be used in `GridSearchCV` or `cross_val_score`.
+*   **`classification_report`:** A convenience function that prints a text summary of Precision, Recall, and F1-score for every class in your dataset.
+
