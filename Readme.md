@@ -20,6 +20,7 @@
 - DL
     - [Activation function](#activation-function)
     - <a href="https://github.com/Arannamoy-Mondal/AI-ML-DL/blob/main/version%202/DL/Readme.md">More</a>
+    - [Different RNN architecture](#different-rnn-architecture)
 # Proxmox set up for gpu passthrough
 #### 🛠️ Edit GRUB
 - Open the GRUB configuration file:
@@ -766,3 +767,48 @@ These compute distances or similarities between samples.
 | **Hardtanh**     | $\max(-1, \min(1, x))$                                                                 | $(-\infty, \infty)$   | $[-1, 1]$                  | $\begin{cases} 0 & \|x\| > 1 \\ 1 & \|x\| < 1 \end{cases}$                         | Bounded activations; efficient on edge devices           |
 | **Hardswish**    | $\begin{cases} 0 & x \le -3 \\ x\frac{x+3}{6} & -3 < x < 3 \\ x & x \ge 3 \end{cases}$ | $(-\infty, \infty)$   | $[0, \infty)$              | $\begin{cases} 0 & x < -3 \\ \frac{2x+3}{6} & -3 < x < 3 \\ 1 & x > 3 \end{cases}$ | Mobile/edge deployment (MobileNetV3); fast               |
 | **Linear**       | $x$                                                                                    | $(-\infty, \infty)$   | $(-\infty, \infty)$        | $1$                                                                                | **Regression output**; bottleneck layers                 |
+
+
+### Different RNN architecture
+| Architecture                             | Primary Purpose                              | Suitable For                                             | Activation Functions                                                             | Key Trade-offs                                                                                   |
+| :--------------------------------------- | :------------------------------------------- | :------------------------------------------------------- | :------------------------------------------------------------------------------- | :----------------------------------------------------------------------------------------------- |
+| **Vanilla RNN (Elman)**                  | Baseline sequential modeling                 | Simple time-series, educational demos                    | **Tanh** or **ReLU**                                                             |  Severe vanishing/exploding gradients; unusable for long sequences                              |
+| **LSTM**                                 | Long-term dependency learning                | Machine translation, speech recognition, text generation | **Sigmoid** (forget/input/output gates), **Tanh** (candidate cell, hidden state) | Solves vanishing gradients;  4x parameters vs Vanilla RNN; slower training                    |
+| **GRU**                                  | Simplified long-term modeling                | Similar to LSTM; often preferred when data is scarce     | **Sigmoid** (reset/update gates), **Tanh** (candidate hidden state)              | Fewer parameters than LSTM; similar accuracy;  Slightly less flexible gating                  |
+| **Bidirectional LSTM/GRU**               | Context from both directions                 | NER, POS tagging, sentiment analysis, speech-to-text     | Same as base cell (Sigmoid + Tanh)                                               | Uses future context;  Cannot do real-time streaming; 2x compute                               |
+| **Stacked / Deep RNN**                   | Richer hierarchical representations          | Speech recognition, acoustic modeling                    | Same as base cell per layer                                                      | More capacity;  Harder to train; diminishing returns beyond 2–4 layers                        |
+| **Peephole LSTM**                        | Precise timing and interval learning         | Rhythm detection, counting tasks, musical timing         | **Sigmoid** (gates see cell state), **Tanh** (candidate)                         | Better temporal precision;  More parameters; marginal gain on most NLP                        |
+| **Coupled / CIFG LSTM**                  | Reduce parameters with minimal accuracy loss | Large-scale speech systems (Google ASR)                  | **Sigmoid** (coupled forget/input), **Tanh** (candidate)                         | ~25% fewer params; nearly LSTM accuracy;  Slightly less gating flexibility                    |
+| **JANET**                                | Prove forget gate is sufficient              | Research, ablation studies                               | **Sigmoid** (forget only), **Tanh** (candidate)                                  | Very simple; competitive on many tasks;  Input gate removal hurts some complex tasks          |
+| **QRNN**                                 | GPU-parallelizable sequence modeling         | Large-batch text classification, language modeling       | **Tanh** (candidate), **Sigmoid** (forget/output)                                | **10–16x faster** than LSTM;  Slightly lower accuracy on some tasks                           |
+| **SRU**                                  | Fast training with simple recurrence         | Deep RNN stacks, real-time NLP                           | **Sigmoid** (forget gate)                                                        | **5–10x faster**; trains deeper models;  Less gating than LSTM                                |
+| **IndRNN**                               | Stable gradients with ReLU                   | Very deep RNNs, long sequences                           | **ReLU** (main), **Sigmoid** (optional gating)                                   | No vanishing/explosion; **6x faster**;  Neurons don't interact in recurrence                  |
+| **uRNN (Unitary RNN)**                   | Theoretically perfect gradient stability     | Extremely long sequences, copying tasks                  | **ModReLU** (complex-valued)                                                     | Eigenvalues = 1; no gradient decay;  Complex numbers; expensive                               |
+| **Clockwork RNN**                        | Multi-timescale dynamics                     | Music, video, hierarchical time-series                   | **Tanh**                                                                         | Captures multiple frequencies naturally;  Fixed manual periods                                |
+| **NTM (Neural Turing Machine)**          | Algorithmic reasoning with external memory   | Copy, sort, repeat tasks; few-shot learning              | **Sigmoid/Tanh** (controller), **Softmax** (attention)                           | Generalizes to longer sequences;  Hard to train; unstable                                     |
+| **DNC (Differentiable Neural Computer)** | Complex structured reasoning                 | Graph navigation, story QA, relational reasoning         | Same as NTM + usage/ allocation gates                                            | Stronger memory management than NTM;  Very complex; slow                                      |
+| **ON-LSTM**                              | Hierarchical syntactic structure             | Parsing, language modeling, syntax-aware NLP             | **Sigmoid/Tanh** + **cumulative softmax** (master gates)                         | Learns grammar implicitly;  More complex gating logic                                         |
+| **Mamba / S4 / SSMs**                    | Ultra-long sequence modeling                 | Genomics, long-document modeling, audio                  | **SiLU/GELU** (gating), **Linear** (state transition)                            | **Linear complexity**; handles 100k+ tokens;  Newer; less ecosystem support than Transformers |
+| **RWKV**                                 | Transformer-quality with RNN inference cost  | Chatbots, long-context LLMs                              | **SiLU**, **Sigmoid** (time-mixing), **Softmax** (channel-mixing)                | Parallel training + linear inference;  Novel architecture; limited research                   |
+
+
+### RNN usecase
+
+| If you need...                     | Choose                        | Because                                           |
+| :--------------------------------- | :---------------------------- | :------------------------------------------------ |
+| A reliable default                 | **LSTM** or **GRU**           | Battle-tested, works everywhere                   |
+| Real-time streaming                | **LSTM/GRU** (unidirectional) | Bidirectional needs future tokens                 |
+| Maximum speed on GPU               | **QRNN** or **SRU**           | Parallelize across time                           |
+| Very long sequences (>1k)          | **IndRNN**, **Mamba/S4**      | Stable gradients or linear complexity             |
+| Algorithmic/memory tasks           | **NTM** or **DNC**            | Explicit external memory                          |
+| Understanding what matters in LSTM | **JANET** or **Coupled LSTM** | Shows forget gate carries the load                |
+| Production long-context LLM        | **Mamba** or **RWKV**         | Linear inference cost vs. Transformer's quadratic |
+
+
+| Scenario                                                    | Better Alternative            | Why                                                |
+| :---------------------------------------------------------- | :---------------------------- | :------------------------------------------------- |
+| Cross-asset correlation modeling (100+ assets, 1 timestamp) | Transformer or GNN            | Spatial/cross-sectional patterns dominate temporal |
+| Image-based fraud (document forgery)                        | CNN / Vision Transformer      | Spatial features, not sequence                     |
+| Tabular fraud with no time component                        | XGBoost / TabNet              | No sequence = no need for recurrence               |
+| Ultra-long sequences (10k+ time steps)                      | Mamba / S4 / Linear Attention | LSTM gradients still decay over extreme lengths    |
+| Need to explain *why* a transaction is fraud                | Attention + Transformer       | Attention weights show which past events mattered  |
