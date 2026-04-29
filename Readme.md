@@ -18,6 +18,8 @@
     - [sklearn.metrics usage purpose](#sklearnmetrics-usage-purpose)
 
 - DL
+    - [Activation function](#activation-function)
+    - <a href="https://github.com/Arannamoy-Mondal/AI-ML-DL/blob/main/version%202/DL/Readme.md">More</a>
 # Proxmox set up for gpu passthrough
 #### 🛠️ Edit GRUB
 - Open the GRUB configuration file:
@@ -741,3 +743,26 @@ These compute distances or similarities between samples.
 | Model comparison / threshold tuning | `precision_recall_curve`, `roc_curve` |
 
 ---
+
+
+
+### Activation function
+
+| Function         | Formula                                                                                | Domain                | Range                      | Derivative $f'(x)$                                                                 | Primary Purpose                                          |
+| :--------------- | :------------------------------------------------------------------------------------- | :-------------------- | :------------------------- | :--------------------------------------------------------------------------------- | :------------------------------------------------------- |
+| **ReLU**         | $\max(0, x)$                                                                           | $(-\infty, \infty)$   | $[0, \infty)$              | $\begin{cases} 0 & x < 0 \\ 1 & x > 0 \end{cases}$                                 | Default CNN/MLP hidden layers                            |
+| **LeakyReLU**    | $\max(0,x) + \alpha\min(0,x)$                                                          | $(-\infty, \infty)$   | $(-\infty, \infty)$        | $\begin{cases} \alpha & x < 0 \\ 1 & x > 0 \end{cases}$                            | Fix dying ReLU (keeps small gradient for negatives)      |
+| **PReLU**        | $\max(0,x) + \alpha\min(0,x)$                                                          | $(-\infty, \infty)$   | $(-\infty, \infty)$        | $\begin{cases} \alpha & x < 0 \\ 1 & x > 0 \end{cases}$                            | LeakyReLU where $\alpha$ is **learnable**                |
+| **RReLU**        | $\max(0,x) + \alpha\min(0,x)$                                                          | $(-\infty, \infty)$   | $(-\infty, \infty)$        | $\begin{cases} \alpha & x < 0 \\ 1 & x > 0 \end{cases}$                            | LeakyReLU where $\alpha$ is **random** per forward pass  |
+| **ELU**          | $\begin{cases} x & x \ge 0 \\ \alpha(e^x - 1) & x < 0 \end{cases}$                     | $(-\infty, \infty)$   | $(-\alpha, \infty)$        | $\begin{cases} 1 & x \ge 0 \\ \alpha e^x & x < 0 \end{cases}$                      | Smooth negative saturation, mean closer to zero          |
+| **SELU**         | $\lambda \cdot \text{ELU}(x)$                                                          | $(-\infty, \infty)$   | $(-\lambda\alpha, \infty)$ | $\begin{cases} \lambda & x \ge 0 \\ \lambda\alpha e^x & x < 0 \end{cases}$         | Self-normalizing networks (no BatchNorm needed)          |
+| **GELU**         | $x \cdot \Phi(x) = \frac{x}{2}\left(1 + \text{erf}\frac{x}{\sqrt{2}}\right)$           | $(-\infty, \infty)$   | $(-\infty, \infty)$        | $\Phi(x) + x \cdot \phi(x)$                                                        | **Transformers** (BERT, GPT, ViT); smooth, probabilistic |
+| **SiLU (Swish)** | $x \cdot \sigma(x) = \frac{x}{1+e^{-x}}$                                               | $(-\infty, \infty)$   | $(-\infty, \infty)$        | $\sigma(x) \cdot \big(1 + x(1-\sigma(x))\big)$                                     | Modern CNNs (EfficientNet); self-gated non-linearity     |
+| **Mish**         | $x \cdot \tanh\big(\text{softplus}(x)\big)$                                            | $(-\infty, \infty)$   | $(-\infty, \infty)$        | $\tanh(\omega) + x\sigma(x)\text{sech}^2(\omega)$ where $\omega = \ln(1+e^x)$      | Strong alternative to Swish; smooth, non-monotonic       |
+| **Softplus**     | $\ln(1 + e^x)$                                                                         | $(-\infty, \infty)$   | $(0, \infty)$              | $\sigma(x) = \frac{1}{1+e^{-x}}$                                                   | Smooth ReLU approximation; some VAEs                     |
+| **Tanh**         | $\frac{e^x - e^{-x}}{e^x + e^{-x}}$                                                    | $(-\infty, \infty)$   | $(-1, 1)$                  | $1 - \tanh^2(x) = \text{sech}^2(x)$                                                | RNNs/LSTMs; zero-centered bounded outputs                |
+| **Sigmoid**      | $\frac{1}{1 + e^{-x}}$                                                                 | $(-\infty, \infty)$   | $(0, 1)$                   | $\sigma(x)\big(1 - \sigma(x)\big)$                                                 | **Binary output** layers; gating mechanisms              |
+| **Softmax**      | $\frac{e^{x_i}}{\sum_j e^{x_j}}$                                                       | $(-\infty, \infty)^n$ | $(0, 1)^n$, sums to 1      | $\frac{\partial f_i}{\partial x_j} = f_i(\delta_{ij} - f_j)$                       | **Multi-class output** layers (probabilities)            |
+| **Hardtanh**     | $\max(-1, \min(1, x))$                                                                 | $(-\infty, \infty)$   | $[-1, 1]$                  | $\begin{cases} 0 & \|x\| > 1 \\ 1 & \|x\| < 1 \end{cases}$                         | Bounded activations; efficient on edge devices           |
+| **Hardswish**    | $\begin{cases} 0 & x \le -3 \\ x\frac{x+3}{6} & -3 < x < 3 \\ x & x \ge 3 \end{cases}$ | $(-\infty, \infty)$   | $[0, \infty)$              | $\begin{cases} 0 & x < -3 \\ \frac{2x+3}{6} & -3 < x < 3 \\ 1 & x > 3 \end{cases}$ | Mobile/edge deployment (MobileNetV3); fast               |
+| **Linear**       | $x$                                                                                    | $(-\infty, \infty)$   | $(-\infty, \infty)$        | $1$                                                                                | **Regression output**; bottleneck layers                 |
