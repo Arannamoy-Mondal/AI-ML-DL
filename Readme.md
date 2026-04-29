@@ -603,57 +603,141 @@ model=mlflow.pyfunc.load_model(model_info.model_uri)
 
 #### sklearn.metrics usage purpose
 
+`sklearn.metrics` is a comprehensive module in scikit-learn that provides tools to evaluate the quality of predictions. Here is a complete breakdown organized by purpose:
+
 ---
 
 ## 1. Classification Metrics
-These are used when your target variable is categorical (e.g., Spam vs. Not Spam). They measure how well the model assigns the correct labels.
 
-| Metric | Purpose | Use Case |
-| :--- | :--- | :--- |
-| **Accuracy** | Ratio of correct predictions to total predictions. | Balanced datasets where every class is equally important. |
-| **Precision** | Ability of the classifier not to label a negative sample as positive. | When the "Cost of False Positive" is high (e.g., Email spam filters). |
-| **Recall (Sensitivity)** | Ability of the classifier to find all positive samples. | When the "Cost of False Negative" is high (e.g., Cancer detection). |
-| **F1-Score** | The harmonic mean of Precision and Recall. | When you need a balance between the two, especially on imbalanced data. |
-| **ROC-AUC** | Area under the Receiver Operating Characteristic curve. | Measuring the model's ability to distinguish between classes at various thresholds. |
-| **Confusion Matrix** | A table layout that allows visualization of the performance of an algorithm. | Deep diving into exactly *where* the model is getting confused. |
+These evaluate how well a model predicts discrete class labels.
 
-
+| Function | Purpose |
+|----------|---------|
+| `accuracy_score` | Fraction of correct predictions. Best for **balanced** datasets. |
+| `precision_score` | Of all predicted positives, how many were actually positive. |
+| `recall_score` | Of all actual positives, how many were correctly identified. |
+| `f1_score` | Harmonic mean of precision and recall. Good for **imbalanced** data. |
+| `fbeta_score` | Generalized F-measure where you control the weight of precision vs recall via `beta`. |
+| `classification_report` | Generates a full summary table with precision, recall, f1-score, and support per class. |
+| `confusion_matrix` | A table showing true vs predicted counts (TP, TN, FP, FN). |
+| `roc_auc_score` | Area under the ROC curve. Measures separability between classes. |
+| `roc_curve` | Computes the False Positive Rate and True Positive Rate at various thresholds. |
+| `precision_recall_curve` | Computes precision-recall pairs at different probability thresholds. |
+| `average_precision_score` | Area under the precision-recall curve. Good for imbalanced datasets. |
+| `log_loss` | Negative log-likelihood. Used when models output probabilities. Lower is better. |
+| `jaccard_score` | Similarity between predicted and actual sets (intersection over union). |
+| `hamming_loss` | Fraction of labels that are incorrectly predicted. Used in multilabel problems. |
+| `zero_one_loss` | Fraction of misclassifications (0-1 loss). |
+| `matthews_corrcoef` | Correlation between predicted and actual. Range [-1, 1]. Robust for imbalanced data. |
+| `cohen_kappa_score` | Measures agreement between two raters (model vs truth), accounting for chance. |
+| `balanced_accuracy_score` | Average of recall obtained on each class. Adjusts for class imbalance. |
+| `top_k_accuracy_score` | Checks if the true label is in the top k predicted labels. |
+| `hinge_loss` | Loss function used by SVMs. |
+| `brier_score_loss` | Measures accuracy of probabilistic predictions. Good for calibrated models. |
 
 ---
 
 ## 2. Regression Metrics
-Regression metrics are used when your target variable is continuous (e.g., predicting house prices or temperature).
 
-*   **Mean Absolute Error (MAE):** The average of the absolute differences between predicted and actual values. It is easy to interpret as it’s in the same units as the target.
-*   **Mean Squared Error (MSE):** The average of the squares of the errors. It heavily penalizes large errors (outliers).
-*   **Root Mean Squared Error (RMSE):** The square root of MSE. It brings the error back to the original units while still penalizing outliers.
-*   **R-squared ($R^2$):** The "coefficient of determination." It represents the proportion of variance for a dependent variable that's explained by the model. 1.0 is a perfect fit.
+These evaluate how well a model predicts continuous values.
 
-
-
----
-
-## 3. Clustering Metrics
-Since clustering is unsupervised (we don't usually have "correct" labels), these metrics evaluate how well-defined the groups are.
-
-*   **Silhouette Coefficient:** Measures how similar an object is to its own cluster compared to other clusters. Scores range from -1 to 1; higher is better.
-*   **Adjusted Rand Index (ARI):** Measures the similarity between two assignments, ignoring permutations. Used if you actually *do* have ground truth labels to compare against.
-*   **Inertia:** Sum of squared distances of samples to their closest cluster center (lower is generally better, but it's not normalized).
-
----
-
-## 4. Pairwise Metrics and Distances
-This sub-module (`sklearn.metrics.pairwise`) calculates distances or similarities between sets of samples rather than evaluating a model's performance.
-
-*   **Cosine Similarity:** Measures the cosine of the angle between two vectors. Widely used in text analysis and recommendation systems.
-*   **Euclidean Distance:** The "straight-line" distance between two points in space.
-*   **Manhattan Distance:** The distance measured along axes at right angles (like walking city blocks).
+| Function | Purpose |
+|----------|---------|
+| `mean_absolute_error` (MAE) | Average absolute difference between predicted and actual. Robust to outliers. |
+| `mean_squared_error` (MSE) | Average squared difference. Penalizes large errors more heavily. |
+| `root_mean_squared_error` (RMSE) | Square root of MSE. Same units as the target variable. |
+| `mean_squared_log_error` (MSLE) | MSE on log-transformed targets. Useful when targets grow exponentially. |
+| `median_absolute_error` | Median of absolute differences. Very robust to outliers. |
+| `r2_score` | Coefficient of determination. Proportion of variance explained (1 = perfect). |
+| `explained_variance_score` | Measures how much variance the model explains vs the mean. |
+| `max_error` | Maximum residual error. Shows the worst-case prediction. |
+| `mean_absolute_percentage_error` (MAPE) | Average percentage error. Useful for relative comparisons. |
+| `mean_pinball_loss` | Used for quantile regression. |
+| `d2_absolute_error_score` | R²-like score using MAE as baseline. |
+| `d2_pinball_score` | R²-like score for quantile regression. |
 
 ---
 
-## 5. Scoring API: The "All-in-One" Tool
-Scikit-Learn also provides a higher-level API to automate evaluation during Cross-Validation or Grid Search.
+## 3. Multilabel Ranking Metrics
 
-*   **`make_scorer`:** A factory function that wraps a metric function so it can be used in `GridSearchCV` or `cross_val_score`.
-*   **`classification_report`:** A convenience function that prints a text summary of Precision, Recall, and F1-score for every class in your dataset.
+Used when each sample can belong to multiple classes, and you want to rank them.
 
+| Function | Purpose |
+|----------|---------|
+| `coverage_error` | Average number of labels that must be included to cover all true labels. |
+| `label_ranking_average_precision_score` | Average precision for each sample's label ranking. |
+| `label_ranking_loss` | Average number of label pairs that are incorrectly ordered. |
+
+---
+
+## 4. Clustering Metrics
+
+These evaluate the quality of clustering algorithms (unsupervised learning).
+
+| Function | Purpose |
+|----------|---------|
+| `adjusted_rand_score` | Similarity between two clusterings, corrected for chance. Range [-1, 1]. |
+| `rand_score` | Raw similarity between two clusterings (no chance correction). |
+| `adjusted_mutual_info_score` | Mutual information between clusterings, adjusted for chance. |
+| `mutual_info_score` | Measures dependency between two clusterings. |
+| `normalized_mutual_info_score` | Mutual information normalized to [0, 1]. |
+| `homogeneity_score` | Clusters contain only members of a single class. |
+| `completeness_score` | All members of a given class are in the same cluster. |
+| `v_measure_score` | Harmonic mean of homogeneity and completeness. |
+| `fowlkes_mallows_score` | Geometric mean of precision and recall for clustering. |
+| `silhouette_score` | Measures how similar an object is to its own cluster vs others. Range [-1, 1]. |
+| `silhouette_samples` | Silhouette coefficient for each individual sample. |
+| `calinski_harabasz_score` | Ratio of between-cluster dispersion to within-cluster dispersion. Higher is better. |
+| `davies_bouldin_score` | Average similarity ratio of each cluster with its most similar cluster. Lower is better. |
+| `contingency_matrix` | Cross-tabulation of true class labels and cluster labels. |
+| `pair_confusion_matrix` | Confusion matrix for pairs of samples (clustered together or not). |
+| `dendrogram` | Visualizes hierarchical clustering (from `scipy` integration). |
+
+---
+
+## 5. Pairwise Metrics & Distances
+
+These compute distances or similarities between samples.
+
+| Function | Purpose |
+|----------|---------|
+| `euclidean_distances` | Straight-line distance between vectors. |
+| `manhattan_distances` | Sum of absolute differences (L1 distance). |
+| `cosine_similarity` | Cosine of the angle between vectors (ignores magnitude). |
+| `cosine_distances` | 1 - cosine_similarity. |
+| `pairwise_distances` | Computes distance matrix using various metrics. |
+| `pairwise_kernels` | Computes kernel matrix (e.g., linear, polynomial, RBF). |
+| `rbf_kernel` | Radial Basis Function kernel. |
+| `polynomial_kernel` | Polynomial kernel for SVMs. |
+| `sigmoid_kernel` | Sigmoid/tanh kernel. |
+| `laplacian_kernel` | Laplacian/exponential kernel. |
+| `chi2_kernel` | Kernel for histogram-based features. |
+| `linear_kernel` | Simple dot product kernel. |
+| `haversine_distances` | Great-circle distance on a sphere (for GPS coordinates). |
+
+---
+
+## 6. Text & NLP Metrics
+
+| Function | Purpose |
+|----------|---------|
+| `jaccard_score` | Also used for text similarity (token overlap). |
+
+---
+
+## Quick Reference: Which One Should You Use?
+
+| Scenario | Recommended Metric |
+|----------|-------------------|
+| Balanced binary classification | `accuracy_score`, `f1_score` |
+| Imbalanced binary classification | `roc_auc_score`, `average_precision_score`, `f1_score`, `matthews_corrcoef` |
+| Multi-class classification | `f1_score` (weighted/macro), `classification_report` |
+| Probabilistic predictions | `log_loss`, `brier_score_loss`, `roc_auc_score` |
+| Regression (general) | `r2_score`, `mean_squared_error` |
+| Regression (outliers present) | `mean_absolute_error`, `median_absolute_error` |
+| Regression (percentage errors) | `mean_absolute_percentage_error` |
+| Clustering (with ground truth) | `adjusted_rand_score`, `normalized_mutual_info_score` |
+| Clustering (without ground truth) | `silhouette_score`, `calinski_harabasz_score` |
+| Model comparison / threshold tuning | `precision_recall_curve`, `roc_curve` |
+
+---
