@@ -19,8 +19,8 @@
 
 - DL
     - [Activation function](#activation-function)
-    - <a href="https://github.com/Arannamoy-Mondal/AI-ML-DL/blob/main/version%202/DL/Readme.md">More</a>
     - [Different RNN architecture](#different-rnn-architecture)
+     - <a href="https://github.com/Arannamoy-Mondal/AI-ML-DL/blob/main/version%202/DL/Readme.md">More</a>
 # Proxmox set up for gpu passthrough
 #### 🛠️ Edit GRUB
 - Open the GRUB configuration file:
