@@ -17,7 +17,8 @@
 - A Comprehensive Review of Machine Learning and Deep Learning Methods for Drug-Target Interaction Prediction
 
 
-## Graph Attention Networks
+## Graph Attention Networks 
+> N.B. (Collected from Hands-On-Graph-Neural-Networks-Using-Python)
 
 Graph Attention Networks (GATs) are a theoretical improvement over GCNs. Instead of static normalization coefficients, they propose weighting factors calculated by a process called self-attention. The same process is at the core of one of the most successful deep learning architectures: the transformer, popularized by BERT and GPT-3. Introduced by Veličković et al. in 2017, GATs have become one of the most popular GNN architectures thanks to excellent out-of-the-box performance.
 
@@ -87,4 +88,32 @@ Their solution consists of modifying the order of operations. The weight matrix 
 $$ a_{ij}=\frac{exp(LeakyReLU(W_{att}^{t}W[x_i||x_j]))}{\sum_{k\epsilon N_i}exp(LeakyReLU(W_{att}^{t}W[x_i||x_k]))} $$
 .And this is the modified operator, GATv2: $$ a_{ij}=\frac{exp(W_{att}^{t}LeakyReLU(W[x_i||x_j]))}{\sum_{k\epsilon N_i}exp(W_{att}^{t}LeakyReLU(W[x_i||x_k]))}$$
 Which one should we use? According to Brody et al., GATv2 consistently outperforms the GAT and thus should be preferred. In addition to the theoretical proof, they also ran several experiments to show the performance of GATv2 compared to the original GAT. In the rest of this chapter, we will consider both options: the GAT in the second section and GATv2 in the third section.
+
+#### Implementing the graph attention layer in NumPy
+As previously stated, neural networks work in terms of matrix multiplications. Therefore, we need to translate our individual embeddings into operations for the entire graph. In this section, we will implement the original graph attention layer from scratch to properly understand the inner workings of self-attention. Naturally, this process can be repeated several times to create multi-head attention.
+
+The first step consists of translating the original graph attention operator in terms of matrices. This is how we defined it in the last section:
+
+$$ h_i=\sum{j\epsilon N_i}\alpha_{ij}Wx_j $$
+
+By taking inspiration from the graph linear layer, we can write the following:
+![](./Images/2.png)
+
+Where $W_{\alpha}$ is a matrix that stores every $a_{ij}$.
+
+In this example, we will use the following graph from the previous chapter:
+
+```py
+import networkx as nx
+UG=nx.Graph()
+UG.add_edges_from([(1,2),(1,3),(3,4),(1,4)])
+nx.draw_networkx(UG,
+                 pos=nx.spring_layout(UG,seed=0),
+                 font_color="white",
+                 font_size=14,
+                 node_size=1000
+                 )
+```
+![](./Images/3.png)
+The graph must provide two important pieces of information: the adjacency matrix with self-loops  and the node features . Let’s see how to implement it in NumPy:
 
